@@ -76,5 +76,4 @@ const IntroTrash = () => {
     </div>
   );
 };
-
 export default IntroTrash;
