@@ -20,8 +20,7 @@ const ProductModal = ({ show, handleClose, handleSave, categories = [] }) => {
     metaKeywords: "",
     thumbnail: "",
     images: [],
-    contents: [""],
-  });
+    });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,21 +41,6 @@ const ProductModal = ({ show, handleClose, handleSave, categories = [] }) => {
     setFormData((prev) => ({ ...prev, images: urls }));
   };
 
-  const handleContentChange = (index, value) => {
-    const newContents = [...formData.contents];
-    newContents[index] = value;
-    setFormData((prev) => ({ ...prev, contents: newContents }));
-  };
-
-  const handleAddContent = () => {
-    setFormData((prev) => ({ ...prev, contents: [...prev.contents, ""] }));
-  };
-
-  const handleRemoveContent = (index) => {
-    const newContents = [...formData.contents];
-    newContents.splice(index, 1);
-    setFormData((prev) => ({ ...prev, contents: newContents }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -244,37 +228,6 @@ const ProductModal = ({ show, handleClose, handleSave, categories = [] }) => {
             </div>
           </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Nội dung bài viết</Form.Label>
-            {formData.contents.map((content, index) => (
-              <div key={index} className="mb-2 d-flex gap-2 align-items-start">
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder={`Bài viết ${index + 1}`}
-                  value={content}
-                  onChange={(e) =>
-                    handleContentChange(index, e.target.value)
-                  }
-                />
-                {formData.contents.length > 1 && (
-                  <Button
-                    variant="outline-danger"
-                    onClick={() => handleRemoveContent(index)}
-                  >
-                    Xoá
-                  </Button>
-                )}
-              </div>
-            ))}
-            <Button
-              variant="outline-primary"
-              size="sm"
-              onClick={handleAddContent}
-            >
-              + Thêm bài viết
-            </Button>
-          </Form.Group>
           <fieldset className="border p-3 mt-4">
           <legend className="w-auto px-2">Thông Tin SEO</legend>
           <Row className="mb-3">
