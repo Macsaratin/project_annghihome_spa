@@ -8,6 +8,7 @@ const EditTeamMemberModal = ({ show, onClose, member, onUpdate }) => {
   const [image, setImage] = useState(null);  
   const [socialLinks, setSocialLinks] = useState("");
 
+  // Khi modal mở, gán giá trị của thành viên vào các trường
   useEffect(() => {
     if (member) {
       setName(member.name);
@@ -17,6 +18,7 @@ const EditTeamMemberModal = ({ show, onClose, member, onUpdate }) => {
       setSocialLinks(member.socialLinks);
     }
   }, [member]);
+
   const handleUpdate = () => {
     const updatedMember = {
       ...member,
@@ -27,70 +29,82 @@ const EditTeamMemberModal = ({ show, onClose, member, onUpdate }) => {
       socialLinks,
       updatedAt: new Date().toISOString(),
     };
-    onUpdate(updatedMember); 
+    onUpdate(updatedMember); // Gọi hàm onUpdate từ props để lưu lại thay đổi
   };
-
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);  
+      setImage(file); // Cập nhật ảnh mới
     }
   };
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Chỉnh sửa thành viên nhóm</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="name">
-            <Form.Label>Họ tên</Form.Label>
-            <Form.Control
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group controlId="name">
+                <Form.Label>Họ tên</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
 
-          <Form.Group controlId="position">
-            <Form.Label>Chức vụ</Form.Label>
-            <Form.Control
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-            />
-          </Form.Group>
+            <div className="col-md-6">
+              <Form.Group controlId="position">
+                <Form.Label>Chức vụ</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
 
-          <Form.Group controlId="bio">
-            <Form.Label>Bio</Form.Label>
-            <Form.Control
-              type="text"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-            />
-          </Form.Group>
+            <div className="col-md-12">
+              <Form.Group controlId="bio">
+                <Form.Label>Thông tin về thành viên</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </Form.Group>
+            </div>
 
-          <Form.Group controlId="image">
-            <Form.Label>Ảnh</Form.Label>
-            <Form.Control
-              type="file"
-              onChange={handleImageChange} 
-            />
-            {image && <div>Ảnh đã chọn: {image.name}</div>}
-          </Form.Group>
+            <div className="col-md-6">
+              <Form.Group controlId="image">
+                <Form.Label>Ảnh</Form.Label>
+                <Form.Control
+                  type="file"
+                  onChange={handleImageChange} // Lấy ảnh từ người dùng
+                />
+                {image && <div>Ảnh đã chọn: {image.name}</div>}
+              </Form.Group>
+            </div>
 
-          <Form.Group controlId="socialLinks">
-            <Form.Label>Liên kết xã hội</Form.Label>
-            <Form.Control
-              type="text"
-              value={socialLinks}
-              onChange={(e) => setSocialLinks(e.target.value)}
-            />
-          </Form.Group>
+            <div className="col-md-6">
+              <Form.Group controlId="socialLinks">
+                <Form.Label>Liên kết xã hội</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={socialLinks}
+                  onChange={(e) => setSocialLinks(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
         </Form>
       </Modal.Body>
 

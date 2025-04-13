@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import {  useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import DescriptionEditor from "../../lib/DescriptionEditor"; // Import DescriptionEditor
 
 const HeaderList = () => {
   const [showModal, setShowModal] = useState(false);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [slogan, setSlogan] = useState(""); // Lưu giá trị cho slogan
   const navigate = useNavigate();
 
   const handleOpen = () => setShowModal(true);
   const handleClose = () => {
     setShowModal(false);
     setLogoPreview(null);
+    setSlogan(""); // Reset slogan khi đóng modal
   };
+
   const handleOpenTrash = () => {
     navigate("/admin/header/trash");
   };
@@ -29,7 +32,8 @@ const HeaderList = () => {
       reader.readAsDataURL(file);
     }
   };
-  const [headers ] = useState([
+
+  const [headers] = useState([
     {
       id: 1,
       logo: "https://via.placeholder.com/50",
@@ -38,7 +42,7 @@ const HeaderList = () => {
       address: "123 Đường ABC, Quận 1",
       hotline: "0123 456 789",
       slogan: "Khách hàng là ưu tiên",
-      status:1,
+      status: 1,
     },
     {
       id: 2,
@@ -48,24 +52,28 @@ const HeaderList = () => {
       address: "456 Đường XYZ, Quận 3",
       hotline: "0987 654 321",
       slogan: "Chất lượng tạo niềm tin",
-      status:1,
-
+      status: 1,
     },
   ]);
 
+  // Hàm thay đổi giá trị slogan từ DescriptionEditor
+  const handleSloganChange = (content) => {
+    setSlogan(content);
+  };
+
   return (
     <div className="container mt-4">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2 className="mb-0">Header</h2>
-            <div className="d-flex gap-2">
-                <button className="btn btn-primary" onClick={handleOpen}>
-                    <i className="bi bi-plus-circle me-2"></i>Thêm mới
-                </button>
-                <button className="btn btn-danger" onClick={handleOpenTrash}>
-                    <i className="bi bi-trash me-2"></i>Thùng rác
-                </button>
-            </div>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="mb-0">Header</h2>
+        <div className="d-flex gap-2">
+          <button className="btn btn-primary" onClick={handleOpen}>
+            <i className="bi bi-plus-circle me-2"></i>Thêm mới
+          </button>
+          <button className="btn btn-danger" onClick={handleOpenTrash}>
+            <i className="bi bi-trash me-2"></i>Thùng rác
+          </button>
         </div>
+      </div>
 
       <table className="table table-bordered table-striped">
         <thead className="table-dark">
@@ -98,18 +106,23 @@ const HeaderList = () => {
               <td>{item.hotline}</td>
               <td>{item.slogan}</td>
               <td>{item.status}</td>
-
               <td>
                 <div className="d-flex gap-2">
-                    <button className="btn btn-sm btn-warning" title="Chỉnh sửa" onClick={handleOpenEdit}>
+                  <button
+                    className="btn btn-sm btn-warning"
+                    title="Chỉnh sửa"
+                    onClick={handleOpenEdit}
+                  >
                     <i className="bi bi-pencil-square"></i>
-                    </button>
-                    <button className="btn btn-sm btn-danger" title="xoá tạm thời">
+                  </button>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    title="xoá tạm thời"
+                  >
                     <i className="bi bi-trash"></i>
-                    </button>
+                  </button>
                 </div>
-            </td>
-
+              </td>
             </tr>
           ))}
         </tbody>
@@ -149,7 +162,10 @@ const HeaderList = () => {
                     </div>
                     <div className="col-md-6">
                       <label className="form-label">Slogan</label>
-                      <input type="text" className="form-control" />
+                      <DescriptionEditor
+                        value={slogan} // Gán giá trị slogan từ state
+                        onChange={handleSloganChange} // Cập nhật slogan khi người dùng thay đổi
+                      />
                     </div>
                     <div className="col-12">
                       <label className="form-label">Logo (Tải ảnh)</label>

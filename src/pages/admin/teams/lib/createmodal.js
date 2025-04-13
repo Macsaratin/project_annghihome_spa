@@ -30,54 +30,70 @@ const CreateTeamMemberModal = ({ show, onClose, onSave }) => {
   };
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Thêm thành viên nhóm</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="name">
-            <Form.Label>Họ tên</Form.Label>
-            <Form.Control
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="position">
-            <Form.Label>Chức vụ</Form.Label>
-            <Form.Control
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="bio">
-            <Form.Label>Bio</Form.Label>
-            <Form.Control
-              type="text"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="image">
-            <Form.Label>Ảnh</Form.Label>
-            <Form.Control
-              type="file"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="socialLinks">
-            <Form.Label>Liên kết xã hội</Form.Label>
-            <Form.Control
-              type="text"
-              value={socialLinks}
-              onChange={(e) => setSocialLinks(e.target.value)}
-            />
-          </Form.Group>
+          <div className="row">
+            <div className="col-md-6">
+              <Form.Group controlId="name">
+                <Form.Label>Họ tên</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-6">
+              <Form.Group controlId="position">
+                <Form.Label>Chức vụ</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-12">
+              <Form.Group controlId="bio">
+                <Form.Label>Thông tin về thành viên</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-6">
+              <Form.Group controlId="image">
+                <Form.Label>Ảnh</Form.Label>
+                <Form.Control
+                  type="file"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+              </Form.Group>
+            </div>
+
+            <div className="col-md-6">
+              <Form.Group controlId="socialLinks">
+                <Form.Label>Liên kết xã hội</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={socialLinks}
+                  onChange={(e) => setSocialLinks(e.target.value)}
+                />
+              </Form.Group>
+            </div>
+          </div>
         </Form>
       </Modal.Body>
       <Modal.Footer>

@@ -1,112 +1,76 @@
-import React, { useState } from "react";
+import React ,{ useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 
-const CreatePolicyModal = ({ show, onClose, onCreate }) => {
-  const [newPolicy, setNewPolicy] = useState({
-    title: "",
-    slug: "",
-    content: "",
-    excerpt: "",
-    isPublished: true,
+const CreatePartnerModal = ({ show, onClose, onCreate }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    logo: "",
+    website: "",
     isActive: true,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewPolicy((prevState) => ({
-      ...prevState,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onCreate(newPolicy); // Gửi chính sách mới lên list
+  const handleSubmit = () => {
+    onCreate(formData); // Gọi onCreate khi submit form
+    onClose(); // Đóng modal
   };
 
-  if (!show) return null;
-
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Thêm Chính Sách Mới</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Tiêu đề</label>
-            <input
+    <Modal show={show} onHide={onClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Thêm đối tác mới</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group controlId="name" className="mb-3">
+            <Form.Label>Tên đối tác</Form.Label>
+            <Form.Control
               type="text"
-              name="title"
-              value={newPolicy.title}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
-              className="form-control"
+              placeholder="Nhập tên đối tác"
             />
-          </div>
-          <div className="form-group">
-            <label>Slug</label>
-            <input
+          </Form.Group>
+          <Form.Group controlId="logo" className="mb-3">
+            <Form.Label>Logo</Form.Label>
+            <Form.Control
               type="text"
-              name="slug"
-              value={newPolicy.slug}
+              name="logo"
+              value={formData.logo}
               onChange={handleChange}
-              className="form-control"
+              placeholder="Nhập đường dẫn logo"
             />
-          </div>
-          <div className="form-group">
-            <label>Nội dung</label>
-            <textarea
-              name="content"
-              value={newPolicy.content}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Tóm tắt</label>
-            <input
+          </Form.Group>
+          <Form.Group controlId="website" className="mb-3">
+            <Form.Label>Website</Form.Label>
+            <Form.Control
               type="text"
-              name="excerpt"
-              value={newPolicy.excerpt}
+              name="website"
+              value={formData.website}
               onChange={handleChange}
-              className="form-control"
+              placeholder="Nhập website"
             />
-          </div>
-          <div className="form-group">
-            <label>Hoạt động</label>
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={newPolicy.isActive}
-              onChange={() =>
-                setNewPolicy((prev) => ({
-                  ...prev,
-                  isActive: !prev.isActive,
-                }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label>Đã xuất bản</label>
-            <input
-              type="checkbox"
-              name="isPublished"
-              checked={newPolicy.isPublished}
-              onChange={() =>
-                setNewPolicy((prev) => ({
-                  ...prev,
-                  isPublished: !prev.isPublished,
-                }))
-              }
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Thêm
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Đóng
-          </button>
-        </form>
-      </div>
-    </div>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onClose}>
+          Đóng
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          Lưu
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-export default CreatePolicyModal;
+export default CreatePartnerModal;

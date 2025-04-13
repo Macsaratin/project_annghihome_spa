@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FormBlog from "./FormBlog"; // Đảm bảo đường dẫn đúng
+import FormBlog from "./FormBlog"; // Đảm bảo đường dẫn chính xác cho FormBlog
 
 const BlogList = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [editBlog, setEditBlog] = useState(null); // Thêm state cho bài blog đang chỉnh sửa
   const [blogs, setBlogs] = useState([
     {
       id: 1,
@@ -32,12 +33,15 @@ const BlogList = () => {
   const handleOpenTrash = () => {
     navigate("/admin/blog/trash");
   };
-  const handleOpenEdit = () => {
-    navigate("/admin/blog/edit");
+
+  const handleOpenEdit = (blog) => {
+    setEditBlog(blog); // Cập nhật bài blog cần chỉnh sửa
+    setShowModal(true); // Mở modal chỉnh sửa
   };
 
-  const handleOpen = () => {
-    setShowModal(true);
+  const handleOpenCreate = () => {
+    setEditBlog(null); // Nếu thêm mới thì không có blog chỉnh sửa
+    setShowModal(true); // Mở modal thêm
   };
 
   const handleClose = () => {
@@ -45,11 +49,19 @@ const BlogList = () => {
   };
 
   const handleSave = (data) => {
-    const newBlog = {
-      ...data,
-      id: blogs.length + 1,
-    };
-    setBlogs([...blogs, newBlog]);
+    if (editBlog) {
+      // Cập nhật blog đã tồn tại
+      setBlogs(
+        blogs.map((blog) => (blog.id === editBlog.id ? { ...blog, ...data } : blog))
+      );
+    } else {
+      // Thêm mới blog
+      const newBlog = {
+        ...data,
+        id: blogs.length + 1,
+      };
+      setBlogs([...blogs, newBlog]);
+    }
   };
 
   return (
@@ -57,7 +69,7 @@ const BlogList = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="mb-0">Blog</h2>
         <div className="d-flex gap-2">
-          <button className="btn btn-primary" onClick={handleOpen}>
+          <button className="btn btn-primary" onClick={handleOpenCreate}>
             <i className="bi bi-plus-circle me-2"></i>Thêm mới
           </button>
           <button className="btn btn-danger" onClick={handleOpenTrash}>
@@ -92,8 +104,11 @@ const BlogList = () => {
               <td>{blog.description}</td>
               <td>{blog.name}</td>
               <td className="d-flex gap-2">
-                <button className="btn btn-warning btn-sm">
-                  <i className="bi bi-pencil-square" onClick={handleOpenEdit}></i>
+                <button
+                  className="btn btn-warning btn-sm"
+                  onClick={() => handleOpenEdit(blog)}
+                >
+                  <i className="bi bi-pencil-square"></i>
                 </button>
                 <button className="btn btn-danger btn-sm">
                   <i className="bi bi-trash"></i>
@@ -104,8 +119,13 @@ const BlogList = () => {
         </tbody>
       </table>
 
-      {/* Modal thêm blog */}
-      <FormBlog show={showModal} handleClose={handleClose} handleSave={handleSave} />
+      {/* Modal thêm/sửa blog */}
+      <FormBlog
+        show={showModal}
+        handleClose={handleClose}
+        handleSave={handleSave}
+        defaultData={editBlog} // Nếu đang chỉnh sửa, truyền dữ liệu của bài blog đó
+      />
     </div>
   );
 };

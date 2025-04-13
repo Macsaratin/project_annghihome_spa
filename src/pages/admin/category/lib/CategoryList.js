@@ -19,6 +19,7 @@ const CategoryList = () => {
     },
   ]);
   const [showModal, setShowModal] = useState(false);  // Trạng thái để hiển thị modal
+  const [searchTerm, setSearchTerm] = useState("");  // Trạng thái cho tìm kiếm danh mục
 
   const handleOpenTrash = () => {
     navigate("/admin/category/trash");
@@ -34,8 +35,19 @@ const CategoryList = () => {
   };
 
   const handleSaveCategory = (newCategory) => {
-    setCategories([...categories, { ...newCategory, id: categories.length + 1 }]);
+    setCategories([
+      ...categories,
+      { ...newCategory, id: categories.length + 1 },
+    ]);
   };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="container mt-4">
@@ -54,6 +66,7 @@ const CategoryList = () => {
         </div>
       </div>
 
+
       <table className="table table-bordered table-striped">
         <thead className="table-dark">
           <tr>
@@ -64,42 +77,50 @@ const CategoryList = () => {
           </tr>
         </thead>
         <tbody>
-          {categories.map((item) => (
-            <tr key={item.id}>
-              <td>
-                <img
-                  src={item.thumbnail}
-                  alt={item.name}
-                  width="80"
-                  className="rounded"
-                />
-              </td>
-              <td>{item.name}</td>
-              <td>{item.status === 1 ? "Hiển thị" : "Ẩn"}</td>
-              <td>
-                <div className="d-flex gap-2">
-                  <button
-                    className="btn btn-sm btn-warning"
-                    onClick={() => handleOpenEdit(item.id)}
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDeleteCategory(item.id)}
-                  >
-                    <i className="bi bi-trash"></i>
-                  </button>
-                </div>
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map((item) => (
+              <tr key={item.id}>
+                <td>
+                  <img
+                    src={item.thumbnail}
+                    alt={item.name}
+                    width="80"
+                    className="rounded"
+                  />
+                </td>
+                <td>{item.name}</td>
+                <td>{item.status === 1 ? "Hiển thị" : "Ẩn"}</td>
+                <td>
+                  <div className="d-flex gap-2">
+                    <button
+                      className="btn btn-sm btn-warning"
+                      onClick={() => handleOpenEdit(item.id)}
+                    >
+                      <i className="bi bi-pencil-square"></i>
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDeleteCategory(item.id)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="text-center">
+                Không có danh mục nào phù hợp với tìm kiếm
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
       {/* Modal Thêm danh mục */}
       <CategoryModal
-        show={showModal} 
+        show={showModal}
         handleClose={() => setShowModal(false)}  // Đóng modal
         handleSave={handleSaveCategory}  // Lưu danh mục mới
         parentOptions={categories}  // Truyền các danh mục hiện tại làm danh mục cha (nếu có)

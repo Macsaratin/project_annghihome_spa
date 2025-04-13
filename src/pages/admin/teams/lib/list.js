@@ -61,12 +61,14 @@ const TeamMemberList = () => {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Danh sách thành viên nhóm</h3>
-        <Button variant="primary" onClick={handleAdd}>
-          <FaPlus /> Thêm thành viên
-        </Button>
-        <Button variant="secondary" onClick={() => navigate("/admin/team/trash")}>
-          Thùng rác
-        </Button>
+        <div className="d-flex gap-2 mb-3 mt-4">
+          <Button variant="primary" onClick={handleAdd}>
+            <FaPlus /> Thêm thành viên
+          </Button>
+          <Button variant="danger" onClick={() => navigate("/admin/team/trash")}>
+            Thùng rác
+          </Button>
+        </div>
       </div>
 
       <Table striped bordered hover responsive>

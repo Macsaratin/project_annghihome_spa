@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import DescriptionEditor from "../../lib/DescriptionEditor";
 
 const EditPolicyModal = ({ show, onClose, policyData, onSave }) => {
-  const [editedPolicyData, setEditedPolicyData] = useState(policyData);
+  const [editedPolicyData, setEditedPolicyData] = useState({
+    title: "",
+    slug: "",
+    content: "",
+    excerpt: "",
+    isPublished: true,
+    isActive: true,
+  });
 
   useEffect(() => {
-    setEditedPolicyData(policyData);
+    if (policyData) setEditedPolicyData(policyData);
   }, [policyData]);
 
   const handleChange = (e) => {
@@ -15,87 +24,104 @@ const EditPolicyModal = ({ show, onClose, policyData, onSave }) => {
     }));
   };
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setEditedPolicyData((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
+
+  const handleContentChange = (value) => {
+    setEditedPolicyData((prevState) => ({
+      ...prevState,
+      content: value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(editedPolicyData);
   };
 
-  if (!show) return null;
-
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Edit Policy</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              value={editedPolicyData.title}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Slug</label>
-            <input
-              type="text"
-              name="slug"
-              value={editedPolicyData.slug}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Content</label>
-            <textarea
-              name="content"
-              value={editedPolicyData.content}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Excerpt</label>
-            <textarea
-              name="excerpt"
-              value={editedPolicyData.excerpt}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Published</label>
-            <input
-              type="checkbox"
-              name="isPublished"
-              checked={editedPolicyData.isPublished}
-              onChange={() =>
-                setEditedPolicyData((prev) => ({ ...prev, isPublished: !prev.isPublished }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label>Active</label>
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={editedPolicyData.isActive}
-              onChange={() =>
-                setEditedPolicyData((prev) => ({ ...prev, isActive: !prev.isActive }))
-              }
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Close
-          </button>
-        </form>
-      </div>
-    </div>
+    <Modal show={show} onHide={onClose} size="xl">
+      <Modal.Header closeButton>
+        <Modal.Title>Chỉnh sửa Chính sách</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Row>
+            {/* Cột trái */}
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Tiêu đề</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={editedPolicyData.title}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Slug</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="slug"
+                  value={editedPolicyData.slug}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Tóm tắt</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="excerpt"
+                  value={editedPolicyData.excerpt}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="Hoạt động"
+                name="isActive"
+                checked={editedPolicyData.isActive}
+                onChange={handleCheckboxChange}
+                className="mb-2"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Đã xuất bản"
+                name="isPublished"
+                checked={editedPolicyData.isPublished}
+                onChange={handleCheckboxChange}
+              />
+            </Col>
+
+            {/* Cột phải */}
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>Nội dung</Form.Label>
+                <DescriptionEditor
+                  value={editedPolicyData.content}
+                  onChange={handleContentChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
+            Đóng
+          </Button>
+          <Button variant="primary" type="submit">
+            Lưu
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 };
 

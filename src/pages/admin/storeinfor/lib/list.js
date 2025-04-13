@@ -58,7 +58,7 @@ const ListStoreInfo = () => {
         <h3>Danh sách thông tin cửa hàng</h3>
         <div>
           <Button variant="primary" onClick={handleAdd} className="me-2">
-            <FaPlus /> Thêm cửa hàng
+            <FaPlus /> Thêm thông tin cửa hàng
           </Button>
           <Button variant="secondary" onClick={() => navigate("/admin/store/trash")}>
             Thùng rác
@@ -113,16 +113,20 @@ const ListStoreInfo = () => {
           )}
         </tbody>
       </Table>
+
+      {/* Modal thêm mới */}
       <CreateStoreModal
         show={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSave={handleSave}
       />
+
+      {/* Modal chỉnh sửa */}
       {selectedStore && (
         <EditStoreModal
           show={showEditModal}
           onClose={() => setShowEditModal(false)}
-          store={selectedStore}
+          store={selectedStore} // Đã sửa lại đúng tên prop
           onUpdate={handleUpdate}
         />
       )}

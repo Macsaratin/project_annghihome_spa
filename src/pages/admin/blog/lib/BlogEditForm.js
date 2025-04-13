@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Card } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
+import DescriptionEditor from "../../lib/DescriptionEditor"; // Đảm bảo đường dẫn chính xác
 
-const BlogEditForm = ({ initialData, onSave }) => {
+const BlogEditForm = ({ show, handleClose, initialData, onSave }) => {
   const [formData, setFormData] = useState({
     image: "",
     title: "",
@@ -34,73 +35,81 @@ const BlogEditForm = ({ initialData, onSave }) => {
     }
   };
 
+  const handleDescriptionChange = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      description: value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
   };
 
   return (
-    <Card className="p-4 mt-4 container">
-      <h3 className="mb-3">Chỉnh sửa Blog</h3>
-      <Form onSubmit={handleSubmit}>
-        {/* Nhóm: Hình ảnh */}
-        <Form.Group className="mb-3">
-          <Form.Label>Hình ảnh</Form.Label>
-          <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-          {formData.image && (
-            <img
-              src={formData.image}
-              alt="preview"
-              className="mt-2"
-              style={{ width: "100%", maxHeight: "300px", objectFit: "cover" }}
+    <Modal show={show} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Chỉnh sửa Blog</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          {/* Nhóm: Hình ảnh */}
+          <Form.Group className="mb-3">
+            <Form.Label>Hình ảnh</Form.Label>
+            <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+            {formData.image && (
+              <img
+                src={formData.image}
+                alt="preview"
+                className="mt-2"
+                style={{ width: "100%", maxHeight: "300px", objectFit: "cover" }}
+              />
+            )}
+          </Form.Group>
+
+          {/* Nhóm: Thông tin cơ bản */}
+          <Form.Group className="mb-3">
+            <Form.Label>Tiêu đề</Form.Label>
+            <Form.Control
+              type="text"
+              name="title"
+              placeholder="Nhập tiêu đề"
+              value={formData.title}
+              onChange={handleChange}
+              required
             />
-          )}
-        </Form.Group>
+          </Form.Group>
 
-        {/* Nhóm: Thông tin cơ bản */}
-        <Form.Group className="mb-3">
-          <Form.Label>Tiêu đề</Form.Label>
-          <Form.Control
-            type="text"
-            name="title"
-            placeholder="Nhập tiêu đề"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          {/* Nhóm: Mô tả - Sử dụng DescriptionEditor */}
+          <Form.Group className="mb-3">
+            <Form.Label>Mô tả</Form.Label>
+            <DescriptionEditor
+              value={formData.description}
+              onChange={handleDescriptionChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Mô tả</Form.Label>
-          <Form.Control
-            as="textarea"
-            name="description"
-            placeholder="Nhập mô tả"
-            rows={4}
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Tác giả</Form.Label>
+            <Form.Control
+              type="text"
+              name="author"
+              placeholder="Nhập tên tác giả"
+              value={formData.author}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Tác giả</Form.Label>
-          <Form.Control
-            type="text"
-            name="author" // Sửa "name" thành "author"
-            placeholder="Nhập tên tác giả"
-            value={formData.author}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        {/* Nút submit */}
-        <Button type="submit" variant="primary">
-          Lưu thay đổi
-        </Button>
-      </Form>
-    </Card>
+          {/* Nút submit */}
+          <Button type="submit" variant="primary">
+            Lưu thay đổi
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 

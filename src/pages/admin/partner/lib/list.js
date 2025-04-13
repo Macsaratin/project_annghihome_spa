@@ -46,21 +46,22 @@ const PartnerList = () => {
       setPartners(partners.filter((partner) => partner.id !== id));
     }
   };
-  const HandleOnTrash=()=>{
-    navigate("/admin/partner/trash")
+
+  const handleOnTrash = () => {
+    navigate("/admin/partner/trash");
   };
 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Danh sách đối tác</h3>
-        <div className="d-flex gap-2">
-        <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-          <FaPlus /> Thêm đối tác
-        </Button>
-        <Button variant="danger" onClick={HandleOnTrash}>
-          <FaTrashAlt /> Thùng rác
-        </Button>
+        <div className="d-flex gap-2 mt-4 mb-3">
+          <Button variant="primary" onClick={() => setShowCreateModal(true)}>
+            <FaPlus /> Thêm đối tác
+          </Button>
+          <Button variant="danger" onClick={handleOnTrash}>
+            <FaTrashAlt /> Thùng rác
+          </Button>
         </div>
       </div>
 
@@ -106,11 +107,13 @@ const PartnerList = () => {
         </tbody>
       </Table>
 
+      {/* Modal tạo đối tác */}
       <CreatePartnerModal
-        show={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        onCreate={handleCreatePartner}
+        show={showCreateModal} // Hiển thị modal khi show là true
+        onClose={() => setShowCreateModal(false)} // Đóng modal khi onClose được gọi
+        onCreate={handleCreatePartner} // Gọi handleCreatePartner khi lưu đối tác mới
       />
+      {/* Modal chỉnh sửa đối tác */}
       <EditPartnerModal
         show={showEditModal}
         onClose={() => setShowEditModal(false)}

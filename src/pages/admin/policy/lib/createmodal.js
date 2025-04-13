@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import DescriptionEditor from "../../lib/DescriptionEditor";
 
 const CreatePolicyModal = ({ show, onClose, onCreate }) => {
   const [newPolicy, setNewPolicy] = useState({
@@ -18,94 +20,104 @@ const CreatePolicyModal = ({ show, onClose, onCreate }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onCreate(newPolicy); // Gửi chính sách mới lên list
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setNewPolicy((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
   };
 
-  if (!show) return null;
+  const handleContentChange = (value) => {
+    setNewPolicy((prevState) => ({
+      ...prevState,
+      content: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCreate({ ...newPolicy, id: Date.now().toString() }); // Tạo id tạm
+  };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Thêm Chính Sách Mới</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Tiêu đề</label>
-            <input
-              type="text"
-              name="title"
-              value={newPolicy.title}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Slug</label>
-            <input
-              type="text"
-              name="slug"
-              value={newPolicy.slug}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Nội dung</label>
-            <textarea
-              name="content"
-              value={newPolicy.content}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Tóm tắt</label>
-            <input
-              type="text"
-              name="excerpt"
-              value={newPolicy.excerpt}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Hoạt động</label>
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={newPolicy.isActive}
-              onChange={() =>
-                setNewPolicy((prev) => ({
-                  ...prev,
-                  isActive: !prev.isActive,
-                }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label>Đã xuất bản</label>
-            <input
-              type="checkbox"
-              name="isPublished"
-              checked={newPolicy.isPublished}
-              onChange={() =>
-                setNewPolicy((prev) => ({
-                  ...prev,
-                  isPublished: !prev.isPublished,
-                }))
-              }
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Thêm
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
+    <Modal show={show} onHide={onClose} size="xl">
+      <Modal.Header closeButton>
+        <Modal.Title>Thêm Chính sách</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Row>
+            {/* Cột trái: Form nhập thông tin */}
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>Tiêu đề</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={newPolicy.title}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Slug</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="slug"
+                  value={newPolicy.slug}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Tóm tắt</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="excerpt"
+                  value={newPolicy.excerpt}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Check
+                type="checkbox"
+                label="Hoạt động"
+                name="isActive"
+                checked={newPolicy.isActive}
+                onChange={handleCheckboxChange}
+                className="mb-2"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Đã xuất bản"
+                name="isPublished"
+                checked={newPolicy.isPublished}
+                onChange={handleCheckboxChange}
+              />
+            </Col>
+
+            {/* Cột phải: Nội dung mô tả (rich editor) */}
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>Nội dung</Form.Label>
+                <DescriptionEditor
+                  value={newPolicy.content}
+                  onChange={handleContentChange}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
             Đóng
-          </button>
-        </form>
-      </div>
-    </div>
+          </Button>
+          <Button variant="primary" type="submit">
+            Thêm
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
   );
 };
 

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import ProductModal from "./modalform";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const ProductList = () => {
   const [showModal, setShowModal] = useState(false);
-  const navigate= useNavigate();
+  const [editingProduct, setEditingProduct] = useState(null);
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -20,19 +23,46 @@ const ProductList = () => {
       status: 1,
     },
   ]);
+
   const handleOpenTrash = () => {
     navigate("/admin/product/trash");
   };
-  const handleOpenEdit =()=>{
-    navigate("/admin/footer/edit");
 
-  }
+  const handleOpenModal = () => {
+    setEditingProduct(null); // Reset nếu đang sửa
+    setShowModal(true);
+  };
 
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-  const handleSaveProduct = (newProduct) => {
-    setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+  const handleSaveProduct = (product) => {
+    if (product.id) {
+      // Cập nhật sản phẩm cũ
+      setProducts((prev) =>
+        prev.map((item) => (item.id === product.id ? product : item))
+      );
+    } else {
+      // Thêm mới
+      setProducts((prev) => [
+        ...prev,
+        { ...product, id: prev.length + 1 },
+      ]);
+    }
+    setShowModal(false);
+  };
+
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
+    setShowModal(true);
+  };
+
+  const handleDeleteProduct = (id) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa sản phẩm này?");
+    if (confirm) {
+      setProducts(products.filter((p) => p.id !== id));
+    }
   };
 
   return (
@@ -40,12 +70,12 @@ const ProductList = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Danh sách sản phẩm</h2>
         <div className="d-flex gap-2">
-            <button className="btn btn-primary m-2" onClick={handleOpenModal}>
-            <i className=" bi bi-plus">thêm sản phẩm</i>
-            </button>
-            <button className="btn btn-danger m-2" onClick={handleOpenTrash}>
-            <i className=" bi bi-trash"> thùng rác</i>
-            </button>
+          <button className="btn btn-primary m-2" onClick={handleOpenModal}>
+            <i className="bi bi-plus"></i> Thêm sản phẩm
+          </button>
+          <button className="btn btn-danger m-2" onClick={handleOpenTrash}>
+            <i className="bi bi-trash"></i> Thùng rác
+          </button>
         </div>
       </div>
 
@@ -75,10 +105,16 @@ const ProductList = () => {
               <td>{item.status === 1 ? "Hiển thị" : "Ẩn"}</td>
               <td>
                 <div className="d-flex gap-2">
-                  <button className="btn btn-sm btn-warning">
+                  <button
+                    className="btn btn-sm btn-warning"
+                    onClick={() => handleEditProduct(item)}
+                  >
                     <i className="bi bi-pencil-square"></i>
                   </button>
-                  <button className="btn btn-sm btn-danger">
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDeleteProduct(item.id)}
+                  >
                     <i className="bi bi-trash"></i>
                   </button>
                 </div>
@@ -92,6 +128,7 @@ const ProductList = () => {
         show={showModal}
         handleClose={handleCloseModal}
         handleSave={handleSaveProduct}
+        editData={editingProduct}
       />
     </div>
   );

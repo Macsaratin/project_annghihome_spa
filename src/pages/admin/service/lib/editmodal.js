@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import DescriptionEditor from "../../lib/DescriptionEditor";
 
 const EditModal = ({ show, onClose, onSave, initialData, categories }) => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,6 @@ const EditModal = ({ show, onClose, onSave, initialData, categories }) => {
         ...initialData,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData]);
 
   const handleChange = (e) => {
@@ -34,6 +34,10 @@ const EditModal = ({ show, onClose, onSave, initialData, categories }) => {
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleLongDescriptionChange = (value) => {
+    setFormData((prevData) => ({ ...prevData, longDescription: value }));
   };
 
   const handleSubmit = (e) => {
@@ -88,12 +92,9 @@ const EditModal = ({ show, onClose, onSave, initialData, categories }) => {
           {/* Mô tả dài */}
           <Form.Group className="mb-3">
             <Form.Label>Mô tả chi tiết</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="longDescription"
+            <DescriptionEditor
               value={formData.longDescription}
-              onChange={handleChange}
-              rows={4}
+              onChange={handleLongDescriptionChange}
             />
           </Form.Group>
 
