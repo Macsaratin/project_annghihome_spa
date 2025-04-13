@@ -48,7 +48,9 @@ import PartnerTrash from '../pages/admin/partner/PartnerTrash';
 //
 import StoreInforPage from '../pages/admin/storeinfor/StoreInforPage';
 import StoreInforTrash from '../pages/admin/storeinfor/StoreInforTrash';
-
+//
+import PolicyPage from '../pages/admin/policy/PolicyPage';
+import PolicyTrash from '../pages/admin/policy/PolicyTrash';
 const RouterAdmin = [
     { path: "/admin", element: <Dashboard /> },
     //
@@ -102,6 +104,10 @@ const RouterAdmin = [
     { path: "/admin/storeinfor", element: < StoreInforPage /> },
     { path: "/admin/storeinfor/trash", element: < StoreInforTrash />},
     //
+    { path: "/admin/policy", element: < PolicyPage /> },
+    { path: "/admin/policy/trash", element: < PolicyTrash /> },
+    //
+
 
 
 
