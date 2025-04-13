@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 const EditForm = ({ show, handleClose, handleUpdate, data }) => {
   const [formData, setFormData] = useState({
@@ -48,28 +48,33 @@ const EditForm = ({ show, handleClose, handleUpdate, data }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Tên sản phẩm</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+          <Row className="mb-3">
+            {/* Product Name */}
+            <Col sm={6}>
+              <Form.Label>Tên sản phẩm</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </Col>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Giá</Form.Label>
-            <Form.Control
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+            {/* Price */}
+            <Col sm={6}>
+              <Form.Label>Giá</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+          </Row>
 
+          {/* Thumbnail */}
           <Form.Group className="mb-3">
             <Form.Label>Ảnh đại diện</Form.Label>
             <Form.Control type="file" accept="image/*" onChange={handleThumbnailUpload} />
@@ -83,6 +88,7 @@ const EditForm = ({ show, handleClose, handleUpdate, data }) => {
             )}
           </Form.Group>
 
+          {/* Additional Images */}
           <Form.Group className="mb-3">
             <Form.Label>Ảnh bổ sung</Form.Label>
             <Form.Control type="file" multiple accept="image/*" onChange={handleImagesUpload} />
@@ -94,6 +100,7 @@ const EditForm = ({ show, handleClose, handleUpdate, data }) => {
             </div>
           </Form.Group>
 
+          {/* Status */}
           <Form.Group className="mb-3">
             <Form.Label>Trạng thái</Form.Label>
             <Form.Select name="status" value={formData.status} onChange={handleChange}>

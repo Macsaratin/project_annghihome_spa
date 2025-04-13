@@ -1,111 +1,110 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { RiTeamFill } from "react-icons/ri";
 
-const SideBar =() =>{
-    return(
+const SideBar = () => {
+  return (
+    <aside className="left-sidebar">
+      <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
+        <ul id="sidebarnav">
 
-      <aside className="left-sidebar">
-          {/* Sidebar navigation */}
-          <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
-            <ul id="sidebarnav">
-              <li className="nav-small-cap">
-                <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                <span className="hide-menu">Home</span>
-              </li>
-              
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/index">
-                  <span><i className="ti ti-layout-dashboard"></i></span>
-                  <span className="hide-menu">Dashboard</span>
-                </Link>
-              </li>
-                            
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/header">
-                  <span><i className="ti ti-layout-dashboard"></i></span>
-                  <span className="hide-menu">Header</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/footer">
-                  <span><i className="ti ti-layout-dashboard"></i></span>
-                  <span className="hide-menu">Footer</span>
-                </Link>
-              </li>
+          {/* HOME */}
+          <li className="nav-small-cap">
+            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span className="hide-menu">HOME</span>
+          </li>
+          <li className="sidebar-item">
+            <Link className="sidebar-link" to="/admin">
+              <span><i className="ti ti-home-2"></i></span>
+              <span className="hide-menu">Dashboard</span>
+            </Link>
+          </li>
 
-              <li className="nav-small-cap">
-                <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                <span className="hide-menu">COMPONENT</span>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/product">
-                  <span><i className="ti ti-article"></i></span>
-                  <span className="hide-menu">Sản Phẩm</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/blog">
-                  <span><i className="ti ti-alert-circle"></i></span>
-                  <span className="hide-menu">Bài Viết</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/category">
-                  <span><i className="ti ti-cards"></i></span>
-                  <span className="hide-menu">Dịch vụ</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/admin/intro">
-                  <span><i className="ti ti-file-description"></i></span>
-                  <span className="hide-menu">Giới thiệu</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/ui-typography">
-                  <span><i className="ti ti-typography"></i></span>
-                  <span className="hide-menu">Typography</span>
-                </Link>
-              </li>
+          {/* SYSTEM */}
+          <li className="nav-small-cap">
+            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span className="hide-menu">SYSTEM</span>
+          </li>
+          {[
+            { to: "/admin/header", icon: "ti ti-layout-navbar", label: "Header" },
+            { to: "/admin/footer", icon: "ti ti-layout-navbar-collapse", label: "Footer" },
+            { to: "/admin/store", icon: "ti ti-building-store", label: "Store" },
+          ].map(({ to, icon, label }) => (
+            <li className="sidebar-item" key={to}>
+              <Link className="sidebar-link" to={to}>
+                <span><i className={icon}></i></span>
+                <span className="hide-menu">{label}</span>
+              </Link>
+            </li>
+          ))}
 
-              <li className="nav-small-cap">
-                <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                <span className="hide-menu">AUTH</span>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/authentication-login">
-                  <span><i className="ti ti-login"></i></span>
-                  <span className="hide-menu">Login</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/authentication-register">
-                  <span><i className="ti ti-user-plus"></i></span>
-                  <span className="hide-menu">Register</span>
-                </Link>
-              </li>
+          {/* COMPONENT */}
+          <li className="nav-small-cap">
+            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span className="hide-menu">COMPONENT</span>
+          </li>
+          {[
+            { to: "/admin/product", icon: "ti ti-package", label: "Sản Phẩm" },
+            { to: "/admin/service", icon: "ti ti-briefcase", label: "Dịch Vụ" },
+            { to: "/admin/category", icon: "ti ti-category", label: "Danh Mục" },
+            { to: "/admin/slider", icon: "ti ti-slideshow", label: "Slider" },
+            { to: "/admin/team", icon: <RiTeamFill />, label: "Đội Ngũ" },
+            { to: "/admin/about", icon: "ti ti-info-circle", label: "Thông tin" },
+            { to: "/admin/blog", icon: "ti ti-news", label: "Bài Viết" },
+            { to: "/admin/intro", icon: "ti ti-id-badge-2", label: "Giới Thiệu" },
+            { to: "/admin/contact", icon: "ti ti-phone", label: "Liên Hệ" },
+            { to: "/admin/image", icon: "ti ti-photo", label: "Hình Ảnh" },
+            { to: "/admin/cart", icon: "ti ti-shopping-cart", label: "Cart" },
+            { to: "/admin/users", icon: "ti ti-users", label: "Người dùng" },
+          ].map(({ to, icon, label }) => (
+            <li className="sidebar-item" key={to}>
+              <Link className="sidebar-link" to={to}>
+                <span>{typeof icon === "string" ? <i className={icon}></i> : icon}</span>
+                <span className="hide-menu">{label}</span>
+              </Link>
+            </li>
+          ))}
 
-              <li className="nav-small-cap">
-                <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                <span className="hide-menu">EXTRA</span>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/icon-tabler">
-                  <span><i className="ti ti-mood-happy"></i></span>
-                  <span className="hide-menu">Icons</span>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link className="sidebar-link" to="/sample-page">
-                  <span><i className="ti ti-aperture"></i></span>
-                  <span className="hide-menu">Sample Page</span>
-                </Link>
-              </li>
-            </ul>
-            <div className="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
-            </div>
-          </nav>
-      </aside>
-    );
-}
-export  default SideBar;
+          {/* AUTH */}
+          <li className="nav-small-cap">
+            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span className="hide-menu">AUTH</span>
+          </li>
+          {[
+            { to: "/authentication-login", icon: "ti ti-login", label: "Đăng nhập" },
+            { to: "/authentication-register", icon: "ti ti-user-plus", label: "Đăng Ký" },
+          ].map(({ to, icon, label }) => (
+            <li className="sidebar-item" key={to}>
+              <Link className="sidebar-link" to={to}>
+                <span><i className={icon}></i></span>
+                <span className="hide-menu">{label}</span>
+              </Link>
+            </li>
+          ))}
+
+          {/* EXTRA */}
+          <li className="nav-small-cap">
+            <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span className="hide-menu">EXTRA</span>
+          </li>
+          {[
+            { to: "/admin/partner", icon: "ti ti-users", label: "Đối tác" },
+            { to: "/admin/Policy", icon: "ti ti-aperture", label: "chính sách" },
+            { to: "/admin/faq", icon: "ti ti-aperture", label: "FaQ" },
+            { to: "/admin/storeinfor", icon: "ti ti-building-store", label: "thông tin cửa hàng" },
+          ].map(({ to, icon, label }) => (
+            <li className="sidebar-item" key={to}>
+              <Link className="sidebar-link" to={to}>
+                <span><i className={icon}></i></span>
+                <span className="hide-menu">{label}</span>
+              </Link>
+            </li>
+          ))}
+
+        </ul>
+      </nav>
+    </aside>
+  );
+};
+
+export default SideBar;

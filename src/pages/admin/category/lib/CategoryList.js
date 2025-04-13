@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import CategoryModal from "./CategoryModal"; 
 import { useNavigate } from "react-router-dom";
+import CategoryModal from "./CategoryModal"; // Import CategoryModal
 
 const CategoryList = () => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
   const [categories, setCategories] = useState([
     {
       id: 1,
@@ -19,23 +18,23 @@ const CategoryList = () => {
       thumbnail: "https://via.placeholder.com/80",
     },
   ]);
-
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const [showModal, setShowModal] = useState(false);  // Trạng thái để hiển thị modal
 
   const handleOpenTrash = () => {
     navigate("/admin/category/trash");
   };
-  const handleOpenEdit =()=>{
-    navigate("/admin/footer/edit");
 
-  }
+  const handleOpenEdit = (id) => {
+    navigate(`/admin/category/edit/${id}`);
+  };
+
+  const handleDeleteCategory = (id) => {
+    const updatedCategories = categories.filter((cat) => cat.id !== id);
+    setCategories(updatedCategories);
+  };
 
   const handleSaveCategory = (newCategory) => {
-    setCategories([
-      ...categories,
-      { ...newCategory, id: categories.length + 1 },
-    ]);
+    setCategories([...categories, { ...newCategory, id: categories.length + 1 }]);
   };
 
   return (
@@ -43,7 +42,10 @@ const CategoryList = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Danh sách danh mục dịch vụ</h2>
         <div className="d-flex gap-2">
-          <button className="btn btn-primary m-2" onClick={handleOpenModal}>
+          <button
+            className="btn btn-primary m-2"
+            onClick={() => setShowModal(true)} // Mở modal khi nhấn nút "Thêm danh mục"
+          >
             <i className="bi bi-plus"></i> Thêm danh mục
           </button>
           <button className="btn btn-danger m-2" onClick={handleOpenTrash}>
@@ -76,10 +78,16 @@ const CategoryList = () => {
               <td>{item.status === 1 ? "Hiển thị" : "Ẩn"}</td>
               <td>
                 <div className="d-flex gap-2">
-                  <button className="btn btn-sm btn-warning">
+                  <button
+                    className="btn btn-sm btn-warning"
+                    onClick={() => handleOpenEdit(item.id)}
+                  >
                     <i className="bi bi-pencil-square"></i>
                   </button>
-                  <button className="btn btn-sm btn-danger">
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDeleteCategory(item.id)}
+                  >
                     <i className="bi bi-trash"></i>
                   </button>
                 </div>
@@ -89,10 +97,12 @@ const CategoryList = () => {
         </tbody>
       </table>
 
+      {/* Modal Thêm danh mục */}
       <CategoryModal
-        show={showModal}
-        handleClose={handleCloseModal}
-        handleSave={handleSaveCategory}
+        show={showModal} 
+        handleClose={() => setShowModal(false)}  // Đóng modal
+        handleSave={handleSaveCategory}  // Lưu danh mục mới
+        parentOptions={categories}  // Truyền các danh mục hiện tại làm danh mục cha (nếu có)
       />
     </div>
   );

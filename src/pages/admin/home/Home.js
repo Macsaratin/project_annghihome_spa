@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Footer from "./Footer";
-import Content from "../content/content";
+import Content from "../analytics/content";
 
 const Home = () => {
   return (
@@ -10,7 +10,6 @@ const Home = () => {
       className="d-flex flex-column min-vh-100"
     >
       <Header />
-
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-3">

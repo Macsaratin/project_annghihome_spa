@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
+import slugify from "slugify";
 
-const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
+const EditCategoryModal = ({ show, handleClose, handleSave, category, parentOptions = [] }) => {
   const [name, setName] = useState("");
-  const [status, setStatus] = useState(1);
+  const [description, setDescription] = useState("");
+  const [order, setOrder] = useState(0);
+  const [isActive, setIsActive] = useState(true);
+  const [parentId, setParentId] = useState(null);
   const [contents, setContents] = useState([""]);
   const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (category) {
       setName(category.name || "");
-      setStatus(category.status ?? 1);
+      setDescription(category.description || "");
+      setOrder(category.order || 0);
+      setIsActive(category.isActive ?? true);
+      setParentId(category.parentId || "");
       setContents(category.contents || [""]);
       setImages(
         (category.images || []).map((fileOrUrl) => ({
@@ -56,9 +63,12 @@ const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
     const updatedCategory = {
       ...category,
       name,
-      status,
+      slug: slugify(name, { lower: true, strict: true }),
+      description,
+      order: Number(order),
+      isActive,
+      parentId: parentId || null,
       contents,
-      thumbnail: images[0]?.file || images[0]?.preview || null,
       images: images.map((img) => img?.file || img?.preview).filter(Boolean),
     };
 
@@ -69,7 +79,7 @@ const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Sửa danh mục dịch vụ</Modal.Title>
+        <Modal.Title>Sửa danh mục</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -84,7 +94,42 @@ const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Ảnh (ảnh đầu tiên là ảnh đại diện)</Form.Label>
+            <Form.Label>Mô tả</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              placeholder="Mô tả danh mục"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Thứ tự hiển thị</Form.Label>
+            <Form.Control
+              type="number"
+              min={0}
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Danh mục cha</Form.Label>
+            <Form.Select value={parentId || ""} onChange={(e) => setParentId(e.target.value || null)}>
+              <option value="">-- Không có --</option>
+              {parentOptions
+                .filter((opt) => opt.id !== category?.id)
+                .map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.name}
+                  </option>
+                ))}
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Ảnh (ảnh đầu tiên là đại diện)</Form.Label>
             {images.map((img, index) => (
               <div key={index} className="d-flex align-items-center mb-2 gap-2">
                 <Form.Control
@@ -100,8 +145,7 @@ const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
                     src={img.preview}
                     height={40}
                     rounded
-                    alt={`preview-${index}`}
-                    style={{ width: "100px", height: "auto", objectFit: "cover" }}
+                    style={{ width: "100px", objectFit: "cover" }}
                   />
                 )}
                 {images.length > 1 && (
@@ -149,10 +193,13 @@ const EditCategoryModal = ({ show, handleClose, handleSave, category }) => {
 
           <Form.Group className="mb-3">
             <Form.Label>Trạng thái</Form.Label>
-            <Form.Select value={status} onChange={(e) => setStatus(+e.target.value)}>
-              <option value={1}>Hiển thị</option>
-              <option value={0}>Ẩn</option>
-            </Form.Select>
+            <Form.Check
+              type="switch"
+              id="isActive-switch"
+              label={isActive ? "Hiển thị" : "Ẩn"}
+              checked={isActive}
+              onChange={() => setIsActive(!isActive)}
+            />
           </Form.Group>
         </Form>
       </Modal.Body>

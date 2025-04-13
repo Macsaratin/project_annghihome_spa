@@ -30,10 +30,10 @@ const BlogList = () => {
   ]);
 
   const handleOpenTrash = () => {
-    navigate("/admin/header/trash");
+    navigate("/admin/blog/trash");
   };
   const handleOpenEdit = () => {
-    navigate("/admin/header/edit");
+    navigate("/admin/blog/edit");
   };
 
   const handleOpen = () => {

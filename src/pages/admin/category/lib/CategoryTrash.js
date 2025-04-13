@@ -32,7 +32,7 @@ const TrashServiceList = () => {
   };
 
   const handleBack = () => {
-    navigate("/admin/service"); // quay lại danh sách chính
+    navigate("/admin/category"); // quay lại danh sách chính
   };
 
   return (

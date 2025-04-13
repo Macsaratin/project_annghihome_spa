@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 
-const BolgEditForm = ({ initialData, onSave }) => {
+const BlogEditForm = ({ initialData, onSave }) => {
   const [formData, setFormData] = useState({
     image: "",
     title: "",
     description: "",
-    name: "",
+    author: "", // Sửa "name" thành "author" để rõ nghĩa hơn
   });
 
   useEffect(() => {
@@ -43,6 +43,7 @@ const BolgEditForm = ({ initialData, onSave }) => {
     <Card className="p-4 mt-4 container">
       <h3 className="mb-3">Chỉnh sửa Blog</h3>
       <Form onSubmit={handleSubmit}>
+        {/* Nhóm: Hình ảnh */}
         <Form.Group className="mb-3">
           <Form.Label>Hình ảnh</Form.Label>
           <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
@@ -56,6 +57,7 @@ const BolgEditForm = ({ initialData, onSave }) => {
           )}
         </Form.Group>
 
+        {/* Nhóm: Thông tin cơ bản */}
         <Form.Group className="mb-3">
           <Form.Label>Tiêu đề</Form.Label>
           <Form.Control
@@ -85,14 +87,15 @@ const BolgEditForm = ({ initialData, onSave }) => {
           <Form.Label>Tác giả</Form.Label>
           <Form.Control
             type="text"
-            name="name"
+            name="author" // Sửa "name" thành "author"
             placeholder="Nhập tên tác giả"
-            value={formData.name}
+            value={formData.author}
             onChange={handleChange}
             required
           />
         </Form.Group>
 
+        {/* Nút submit */}
         <Button type="submit" variant="primary">
           Lưu thay đổi
         </Button>
@@ -101,4 +104,4 @@ const BolgEditForm = ({ initialData, onSave }) => {
   );
 };
 
-export default BolgEditForm;
+export default BlogEditForm;

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 
 const ProductModal = ({ show, handleClose, handleSave }) => {
   const [formData, setFormData] = useState({
     name: "",
+    slug: "",
+    description: "",
+    longDescription: "",
     price: "",
+    salePrice: "",
     status: 1,
     thumbnail: "",
     images: [],
@@ -48,8 +52,8 @@ const ProductModal = ({ show, handleClose, handleSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSave(formData);
-    handleClose();
+    handleSave(formData);  // Save the data
+    handleClose();  // Close the modal
   };
 
   return (
@@ -59,31 +63,90 @@ const ProductModal = ({ show, handleClose, handleSave }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Tên sản phẩm</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+          <Row className="mb-3">
+            {/* Product Name */}
+            <Col sm={6}>
+              <Form.Label>Tên sản phẩm</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </Col>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Giá</Form.Label>
-            <Form.Control
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+            {/* Product Slug */}
+            <Col sm={6}>
+              <Form.Label>Slug</Form.Label>
+              <Form.Control
+                type="text"
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+          </Row>
 
+          <Row className="mb-3">
+            {/* Description */}
+            <Col sm={6}>
+              <Form.Label>Mô tả ngắn</Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </Col>
+
+            {/* Long Description */}
+            <Col sm={6}>
+              <Form.Label>Mô tả chi tiết</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="longDescription"
+                value={formData.longDescription}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
+
+          <Row className="mb-3">
+            {/* Price */}
+            <Col sm={6}>
+              <Form.Label>Giá</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+
+            {/* Sale Price */}
+            <Col sm={6}>
+              <Form.Label>Giá giảm (nếu có)</Form.Label>
+              <Form.Control
+                type="number"
+                name="salePrice"
+                value={formData.salePrice}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
+
+          {/* Thumbnail */}
           <Form.Group className="mb-3">
             <Form.Label>Ảnh đại diện</Form.Label>
-            <Form.Control type="file" accept="image/*" onChange={handleThumbnailUpload} />
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailUpload}
+            />
             {formData.thumbnail && (
               <img
                 src={formData.thumbnail}
@@ -94,24 +157,43 @@ const ProductModal = ({ show, handleClose, handleSave }) => {
             )}
           </Form.Group>
 
+          {/* Additional Images */}
           <Form.Group className="mb-3">
             <Form.Label>Ảnh bổ sung</Form.Label>
-            <Form.Control type="file" multiple accept="image/*" onChange={handleImagesUpload} />
+            <Form.Control
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImagesUpload}
+            />
             <div className="mt-2 d-flex flex-wrap gap-2">
               {formData.images.map((img, index) => (
-                <img key={index} src={img} alt={`Extra ${index}`} style={{ width: "80px" }} />
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Extra ${index}`}
+                  style={{ width: "80px" }}
+                />
               ))}
             </div>
           </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Trạng thái</Form.Label>
-            <Form.Select name="status" value={formData.status} onChange={handleChange}>
-              <option value={1}>Hiển thị</option>
-              <option value={0}>Ẩn</option>
-            </Form.Select>
-          </Form.Group>
+          <Row className="mb-3">
+            {/* Status */}
+            <Col sm={6}>
+              <Form.Label>Trạng thái</Form.Label>
+              <Form.Select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+              >
+                <option value={1}>Hiển thị</option>
+                <option value={0}>Ẩn</option>
+              </Form.Select>
+            </Col>
+          </Row>
 
+          {/* Contents */}
           <Form.Group className="mb-3">
             <Form.Label>Nội dung bài viết</Form.Label>
             {formData.contents.map((content, index) => (
@@ -138,6 +220,7 @@ const ProductModal = ({ show, handleClose, handleSave }) => {
             </Button>
           </Form.Group>
 
+          {/* Buttons */}
           <div className="text-end">
             <Button variant="secondary" onClick={handleClose} className="me-2">
               Hủy
