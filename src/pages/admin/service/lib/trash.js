@@ -4,7 +4,7 @@ import {
   getTrashedServices,
   restoreService,
   deleteServicePermanently,
-} from "../../functionservice/servicesFunction"; // Đường dẫn giả định
+} from "../../../functionservice/servicesFunction";
 
 const ServiceTrash = () => {
   const [trashedServices, setTrashedServices] = useState([]);

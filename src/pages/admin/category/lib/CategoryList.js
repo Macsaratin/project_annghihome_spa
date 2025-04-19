@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryModal from "./CategoryModal"; // Import CategoryModal
+import categoryService from "../../../functionservice/categoryService"; // Import categoryService
 
 const CategoryList = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Dịch vụ khám tổng quát",
-      status: 1,
-      thumbnail: "https://via.placeholder.com/80",
-    },
-    {
-      id: 2,
-      name: "Dịch vụ tiêm chủng",
-      status: 0,
-      thumbnail: "https://via.placeholder.com/80",
-    },
-  ]);
-  const [showModal, setShowModal] = useState(false);  // Trạng thái để hiển thị modal
-  const [searchTerm, setSearchTerm] = useState("");  // Trạng thái cho tìm kiếm danh mục
+  const [categories, setCategories] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await categoryService.getAllCategories();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleOpenTrash = () => {
     navigate("/admin/category/trash");
@@ -29,16 +31,17 @@ const CategoryList = () => {
     navigate(`/admin/category/edit/${id}`);
   };
 
-  const handleDeleteCategory = (id) => {
-    const updatedCategories = categories.filter((cat) => cat.id !== id);
-    setCategories(updatedCategories);
+  const handleDeleteCategory = async (id) => {
+    try {
+      await categoryService.deleteCategory(id);
+      setCategories(categories.filter((cat) => cat.id !== id));
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
   };
 
   const handleSaveCategory = (newCategory) => {
-    setCategories([
-      ...categories,
-      { ...newCategory, id: categories.length + 1 },
-    ]);
+    setCategories([...categories, { ...newCategory, id: categories.length + 1 }]);
   };
 
   const handleSearch = (e) => {
@@ -56,7 +59,7 @@ const CategoryList = () => {
         <div className="d-flex gap-2">
           <button
             className="btn btn-primary m-2"
-            onClick={() => setShowModal(true)} // Mở modal khi nhấn nút "Thêm danh mục"
+            onClick={() => setShowModal(true)} // Show modal when clicking "Add Category"
           >
             <i className="bi bi-plus"></i> Thêm danh mục
           </button>
@@ -66,6 +69,15 @@ const CategoryList = () => {
         </div>
       </div>
 
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Tìm kiếm danh mục"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
 
       <table className="table table-bordered table-striped">
         <thead className="table-dark">
@@ -82,7 +94,7 @@ const CategoryList = () => {
               <tr key={item.id}>
                 <td>
                   <img
-                    src={item.thumbnail}
+                    src={item.imageUrl || "default-image-url.jpg"} // Fallback image URL if none provided
                     alt={item.name}
                     width="80"
                     className="rounded"
@@ -118,12 +130,12 @@ const CategoryList = () => {
         </tbody>
       </table>
 
-      {/* Modal Thêm danh mục */}
+      {/* Category Modal for adding new category */}
       <CategoryModal
         show={showModal}
-        handleClose={() => setShowModal(false)}  // Đóng modal
-        handleSave={handleSaveCategory}  // Lưu danh mục mới
-        parentOptions={categories}  // Truyền các danh mục hiện tại làm danh mục cha (nếu có)
+        handleClose={() => setShowModal(false)} // Close modal
+        handleSave={handleSaveCategory} // Save new category
+        parentOptions={categories} // Pass existing categories as parent options (if needed)
       />
     </div>
   );

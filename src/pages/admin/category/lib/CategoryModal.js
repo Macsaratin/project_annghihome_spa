@@ -17,7 +17,7 @@ const CategoryModal = ({ show, handleClose, handleSave, parentOptions = [] }) =>
     setName("");
     setSlug("");
     setDescription("");
-    setType("PRODUCT");
+    setType("PRODUCT","SERVICE","NEWS");
     setParentId("");
     setOrder(0);
     setStatus(1);
@@ -122,10 +122,11 @@ const CategoryModal = ({ show, handleClose, handleSave, parentOptions = [] }) =>
               </Form.Select>
             </Col>
             <Col md={3}>
-              <Form.Label>Kiểu</Form.Label>
+              <Form.Label>Loại</Form.Label>
               <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
                 <option value="PRODUCT">Sản phẩm</option>
                 <option value="SERVICE">Dịch vụ</option>
+                <option value="NEWS">Tin Tức</option>
               </Form.Select>
             </Col>
             <Col md={3}>

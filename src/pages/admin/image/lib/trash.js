@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
-import { FaTrashAlt, FaUndo, FaTrash } from "react-icons/fa"; // Add FaUndo for restore functionality
-import { getTrashedImages, restoreImage, deleteImagePermanently } from "../../functionservice/imageFunction"; // Assuming similar functions for images
-
+import { FaTrashAlt, FaUndo, FaTrash } from "react-icons/fa";
+import { getTrashedImages, restoreImage, deleteImagePermanently } from "../../../functionservice/imageFunction";
 const ImageTrash = () => {
   const [trashedImages, setTrashedImages] = useState([]);
 
